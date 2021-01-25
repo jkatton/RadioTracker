@@ -1,0 +1,1 @@
+C:\Progra~1\Python38\Scripts\pyinstaller.exe --onefile --noconsole --distpath "C:\Users\saruser\Documents\gps radio tracker\PythonTerminal-master\dist" -i "C:\Users\saruser\Documents\gps radio tracker\PythonTerminal-master\map.ico" "C:\Users\saruser\Documents\gps radio tracker\PythonTerminal-master\radio_tracker.py"
