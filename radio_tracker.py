@@ -55,7 +55,7 @@ def_sartopo_server = "localhost:8080/m/XYZ"
 
 #setup all the gui stuff.  There's probably a much cleaner way to do this, but like with stacking enough ladders sideways this seems to work
 root = tk.Tk() # create a Tk root window
-root.title( "Kenwood Radio to SarTopo Monitor/Importer v1.5.1" )
+root.title( "Kenwood Radio to SarTopo Monitor/Importer v1.6" )
 
 # from https://stackoverflow.com/questions/9929479/embed-icon-in-python-script
 import base64
