@@ -14,6 +14,7 @@
 # v1.5 - added more radio alias spots, updated to new version of sartopo-python library, now using json properly
 # v1.5.1 - fixed base radio for arowsmith and cleaned up parsing http and https strings from sartopo address, added embedded ico
 # v1.5.2 - tweaked log display of polling and recieving coordinates & com port opening/closing, no longer opens sartopo connection if no options are checkmarked
+# v1.6 - automatically finds available com ports
 
 import tkinter as tk
 from tkinter import ttk
@@ -3001,10 +3002,27 @@ ttk.Label(connectionframe, text="Radio:").grid(column=0, row=1, sticky=(E), pady
 
 comport_input = StringVar()
 
+# get list of active com ports
+# from https://stackoverflow.com/questions/49176095/pyserial-in-pythonlist-out-available-comports-without-for-loop
+import serial.tools.list_ports
+
+def GetComPortList():
+    ports = serial.tools.list_ports.comports()
+    if len(ports) == 0:
+        comportlist = ['SCAN']
+    else:
+        comportlist = ([port.device for port in ports])
+#   testing to see what com ports are found
+#    print(comportlist)
+    comport_sel['values'] = comportlist
+#    return comportlist
 
 comport_sel = ttk.Combobox(connectionframe, textvariable=comport_input, width="6", state="readonly", justify='center')
-comport_sel['values'] = ('COM1','COM2','COM3','COM4','COM5','COM6','COM7','COM8','COM9')
-comport_sel.current(0) #default to COM1
+GetComPortList()
+
+#comport_sel['values'] = GetComPortList #populate the list
+comport_sel.current(0) #default to first option
+comport_sel.bind("<<ComboboxSelected>>",GetComPortList()) #update he comport list whenever a value is selected.  Couldn't find a way to update when the flyout is activated, so it works on the second click
 
 comport_sel.grid(column=1, row=1, sticky=(W), pady=5, padx=5)
 
@@ -3013,13 +3031,15 @@ comport_sel.grid(column=1, row=1, sticky=(W), pady=5, padx=5)
 def OpenCommand():
     if button_openclose.cget("text") == 'Open COM Port':
         comport = comport_input.get()
-        baudrate = 9600 #default for kenwood radios
-        serialPort.Open(comport,baudrate)
-        button_openclose.config(text='Close COM Port')
-        now = datetime.now()
-        datestamp = now.strftime("%y/%m/%d %H:%M:%S ") # make a date stamp
-        textbox2.insert('1.0',"\n" + datestamp + "COM Port Opened\n")
-        comport_sel["state"] = DISABLED
+        if comport != 'SCAN':  #make sure the com port list isn't empty
+            baudrate = 9600 #default for kenwood radios
+            serialPort.Open(comport,baudrate)
+            button_openclose.config(text='Close COM Port')
+            now = datetime.now()
+            datestamp = now.strftime("%y/%m/%d %H:%M:%S ") # make a date stamp
+            textbox2.insert('1.0',"\n" + datestamp + "COM Port Opened\n")
+            comport_sel["state"] = DISABLED
+
     elif button_openclose.cget("text") == 'Close COM Port':
             serialPort.Close()
             button_openclose.config(text='Open COM Port')
@@ -3293,7 +3313,7 @@ toggle_vis_second()
 
 comport_sel_ttp = CreateToolTip(comport_sel, "Select the COM Port on this computer that your Kenwood Radio plugs into (either directly or through a USB adapter. If you're not sure, check Device Manager.")
 button_openclose_ttp = CreateToolTip(button_openclose, "COM Port must be " + '"opened"' + ' to be used.  Pro-tip: Only one program can have a COM port "open" at a time.' + " If you're getting no data, make sure another program isn't already using it")
-sartopo_server_sel_ttp = CreateToolTip(sartopo_server_sel, "Enter the URL address for the map where you'd like the radio tracks to be added. Pro-tip: It's got to be an offline sartopo server, and the format should look like   server:8080/m/XYZ  , where server:8080 is the address and port where an offline sartopo server is running, and XYZ is the three (or sometimes four) character map code. Protip#2: If the server isn't running on the same computer as the radio tracking program, localhost is not correct.")
+sartopo_server_sel_ttp = CreateToolTip(sartopo_server_sel, "Enter the URL address for the map where you'd like the radio tracks to be added. Pro-tip: It's got to be an offline sartopo server, and the format should look like   server:8080/m/XYZ  , where server:8080 is the address and port where an offline sartopo server is running, and XYZ is the three (or sometimes four) character map code. Protip#2: If the server isn't running on the same computer as the radio tracking program, localhost is not correct. Protip#3: if sartopo.com is anywhere in this box, you are doing it wrong.")
 button_hide_ttp = CreateToolTip(button_hide, "Click me for a fun surprise!  If you don't like the result, click me again!")
 button_hide_second_ttp = CreateToolTip(button_hide_second, "Click me for a fun surprise!  If you don't like the result, click me again!")
 tick_current_ttp = CreateToolTip(tick_current, "When this option is enabled, a solid marker will be placed and updated on the sartopo map (in the folder Current Radio Tracks) to show the most recently reported location of each radio.")
