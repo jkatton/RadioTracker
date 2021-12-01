@@ -1,2 +1,13 @@
 __pycache__/
 *.spec
+build/radio_tracker/EXE-00.toc
+build/radio_tracker/PKG-00.pkg
+build/radio_tracker/PKG-00.toc
+build/radio_tracker/PYZ-00.pyz
+build/radio_tracker/PYZ-00.toc
+build/radio_tracker/radio_tracker.exe.manifest
+build/radio_tracker/Tree-00.toc
+build/radio_tracker/Tree-01.toc
+build/radio_tracker/Tree-02.toc
+build/radio_tracker/warn-radio_tracker.txt
+build/radio_tracker/xref-radio_tracker.html
