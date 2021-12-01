@@ -15,6 +15,7 @@
 # v1.5.1 - fixed base radio for arowsmith and cleaned up parsing http and https strings from sartopo address, added embedded ico
 # v1.5.2 - tweaked log display of polling and recieving coordinates & com port opening/closing, no longer opens sartopo connection if no options are checkmarked
 # v1.6 - automatically finds available com ports
+# v1.6.1 - fixed bug where pinging radios on the second page of the radio list pinged the radio listed one above instead
 
 import tkinter as tk
 from tkinter import ttk
@@ -55,7 +56,7 @@ def_sartopo_server = "localhost:8080/m/XYZ"
 
 #setup all the gui stuff.  There's probably a much cleaner way to do this, but like with stacking enough ladders sideways this seems to work
 root = tk.Tk() # create a Tk root window
-root.title( "Kenwood Radio to SarTopo Monitor/Importer v1.6" )
+root.title( "Kenwood Radio to SarTopo Monitor/Importer v1.6.1" )
 
 # from https://stackoverflow.com/questions/9929479/embed-icon-in-python-script
 import base64
@@ -3284,7 +3285,7 @@ for ii in range(0,20):
     radiolist[ii+20].grid(row=1+ii, column=0, pady=2, padx=10)
     namelist.append(Entry(frame4b, width=5))
     namelist[ii+20].grid(row=1+ii, column=1, pady=2, padx=10)
-    buttonlist.append(Button(frame4b, text="<>", image=pixelVirtual, width=10, height=10, compound="c",command=partial(PollRadio,ii+19)))
+    buttonlist.append(Button(frame4b, text="<>", image=pixelVirtual, width=10, height=10, compound="c",command=partial(PollRadio,ii+20)))
     buttonlist[ii+20].grid(row=1+ii, column=2, pady=2, padx=10)
 #fix top and bottom border
 radiolist[20].grid(pady=[5,2], padx=10)
