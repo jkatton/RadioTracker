@@ -6,7 +6,7 @@
 # Using code modified from sartopo_address  https://github.com/ncssar/sartopo_address
 
 # Radio Tracker for NXDN Radios (Icom or Kenwood)
-#previous versions from fork of jkatton/RadioTracker
+# Previous versions from fork of jkatton/RadioTracker
 # V1.0 - Initial release
 # V1.1 - Bugs fixed, released to crsar for testing on MCC
 # V1.2 - changed message parsing to work with asar radios
@@ -18,6 +18,8 @@
 # v1.5.2 - tweaked log display of polling and recieving coordinates & com port opening/closing, no longer opens sartopo connection if no options are checkmarked
 # v1.6 - automatically finds available com ports
 # v1.6.1 - fixed bug where pinging radios on the second page of the radio list pinged the radio listed one above instead
+# Modified versions for Icom
+# v1.6.1b -  
 
 import tkinter as tk
 from tkinter import ttk
@@ -3360,9 +3362,11 @@ def OnReceiveSerialData(message):
     messagetype = "N" # default is that it's not a valid message, don't print anything in upper textbox
 
     # check for GPS identifiers in the message recieved
-    if "$PKLDS" in message_split: #if we've gotten a gps message from a SAR radio, only need parts 0 (identifier), 2 (active or old gps), 3&5 (lat&long), 13 (radio identifier)
+    # if "$PKNDS" in message_split: #if we've gotten a gps message from an Icom SAR radio, only need parts 0 (identifier), 2 (active or old gps), 3&5 (lat&long), 13 (
+    if "$PKLDS" in message_split: #if we've gotten a gps message from a Kenwood SAR radio, only need parts 0 (identifier), 2 (active or old gps), 3&5 (lat&long), 13 (radio identifier)
 
-        data_offset = message_split.index("$PKLDS") # find where in serial string we've recieved gps data (with SAR radios it's always 0, but good to check)
+        #data_offset = message_split.index("$PKNDS") # find where in serial string we've recieved Icom gps data (with SAR radios it's always 0, but good to check)
+        data_offset = message_split.index("$PKLDS") # find where in serial string we've recieved Kenwood gps data (with SAR radios it's always 0, but good to check)
         lat = float(message_split[data_offset+3][:2]) + float(message_split[data_offset+3][2:])/60 # get latitude, format is DDMM.MMMM north
         long = float(message_split[data_offset+5][:3]) + float(message_split[data_offset+5][3:])/60 # get longitude, format is DDDMM.MMMM west
         utmcoord = utm.from_latlon(lat, long*-1) # utm module takes negative longitude for west (could look at offset 4 and 6 for N/S and E/W, but pretty unnecessary at this point)
