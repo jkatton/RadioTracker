@@ -1,10 +1,12 @@
+#Fork of jkatton/RadioTracker modified / adapted for use with Icom radios used by SVSAR.
 # Using code modified from:
 # Serial COM Port terminal program
 # 8/17/2017, Dale Gambill
 # 
 # Using code modified from sartopo_address  https://github.com/ncssar/sartopo_address
 
-# Radio Tracker for Kenwood Radios
+# Radio Tracker for NXDN Radios (Icom or Kenwood)
+#previous versions from fork of jkatton/RadioTracker
 # V1.0 - Initial release
 # V1.1 - Bugs fixed, released to crsar for testing on MCC
 # V1.2 - changed message parsing to work with asar radios
@@ -56,7 +58,7 @@ def_sartopo_server = "localhost:8080/m/XYZ"
 
 #setup all the gui stuff.  There's probably a much cleaner way to do this, but like with stacking enough ladders sideways this seems to work
 root = tk.Tk() # create a Tk root window
-root.title( "Kenwood Radio to SarTopo Monitor/Importer v1.6.1" )
+root.title( "Digital Radio to SarTopo Monitor/Importer v1.6.1" )
 
 # from https://stackoverflow.com/questions/9929479/embed-icon-in-python-script
 import base64
@@ -3033,7 +3035,7 @@ def OpenCommand():
     if button_openclose.cget("text") == 'Open COM Port':
         comport = comport_input.get()
         if comport != 'SCAN':  #make sure the com port list isn't empty
-            baudrate = 9600 #default for kenwood radios
+            baudrate = 9600 #default for kenwood and Icom radios
             serialPort.Open(comport,baudrate)
             button_openclose.config(text='Close COM Port')
             now = datetime.now()
@@ -3312,15 +3314,15 @@ toggle_vis()
 toggle_vis_second()
 
 
-comport_sel_ttp = CreateToolTip(comport_sel, "Select the COM Port on this computer that your Kenwood Radio plugs into (either directly or through a USB adapter. If you're not sure, check Device Manager.")
-button_openclose_ttp = CreateToolTip(button_openclose, "COM Port must be " + '"opened"' + ' to be used.  Pro-tip: Only one program can have a COM port "open" at a time.' + " If you're getting no data, make sure another program isn't already using it")
+comport_sel_ttp = CreateToolTip(comport_sel, "Select the COM Port on this computer that your base radio plugs into (either directly or through a USB adapter. If you're not sure, check Device Manager.")
+button_openclose_ttp = CreateToolTip(button_openclose, "COM Port must be " + '"opened"' + ' to be used.  Pro-tip: Only one program can have a COM port "open" at a time.' + " If you're getting no data, make sure another program (i.e OziTracker) isn't already using it")
 sartopo_server_sel_ttp = CreateToolTip(sartopo_server_sel, "Enter the URL address for the map where you'd like the radio tracks to be added. Pro-tip: It's got to be an offline sartopo server, and the format should look like   server:8080/m/XYZ  , where server:8080 is the address and port where an offline sartopo server is running, and XYZ is the three (or sometimes four) character map code. Protip#2: If the server isn't running on the same computer as the radio tracking program, localhost is not correct. Protip#3: if sartopo.com is anywhere in this box, you are doing it wrong.")
 button_hide_ttp = CreateToolTip(button_hide, "Click me for a fun surprise!  If you don't like the result, click me again!")
 button_hide_second_ttp = CreateToolTip(button_hide_second, "Click me for a fun surprise!  If you don't like the result, click me again!")
 tick_current_ttp = CreateToolTip(tick_current, "When this option is enabled, a solid marker will be placed and updated on the sartopo map (in the folder Current Radio Tracks) to show the most recently reported location of each radio.")
 tick_archive_ttp = CreateToolTip(tick_archive, "When this option is enabled, folder called Radio Archive - [radio name] will be created for every radio and an outlined marker will be added to the sartopo map on each radio contact to show a breadcrumb trail of its location history.")
 
-rad_num_but_ttp = CreateToolTip(rad_num_but, "Enter four digit radio number here. If GPS data is recieved from a unit number found in the Radio # column, any future current and/or archive points points written to the sartopo map will be renamed to whatever is in the corresponding entry in the Team ID column. Click to sort by this column.")
+rad_num_but_ttp = CreateToolTip(rad_num_but, "Enter four digit radio number here. If GPS data is recieved from a unit number found in the Radio # column, any future current and/or archive points written to the sartopo map will be renamed to whatever is in the corresponding entry in the Team ID column. Click to sort by this column.")
 team_id_but_ttp = CreateToolTip(team_id_but, "Enter desired radio name here. If GPS data is recieved from a unit number found in the Radio # column, any future current and/or archive points written to the sartopo map will be renamed to whatever is in the corresponding entry in the Team ID column. Click to sort by this column.")
 ping_but_ttp = CreateToolTip(ping_but, "Click button to send a location poll request to this radio.  Ensure that FLEET ID is set correctly.")
 rad_num_but2_ttp = CreateToolTip(rad_num_but2, "Enter four digit radio number here. If GPS data is recieved from a unit number found in the Radio # column,  any future current and/or archive points written to the sartopo map will be renamed to whatever is in the corresponding entry in the Team ID column. Click to sort by this column.")
@@ -3332,8 +3334,8 @@ save_but_ttp = CreateToolTip(save_but, "Click to save the radio and id list to a
 load_but_ttp = CreateToolTip(load_but, "Click to load a previously saved radio and id list.  The current list will be overwritten.")
 
 tick_autopop_radios_ttp = CreateToolTip(tick_autopop_radios,"When this option is enabled, radio numbers will be added automatically to the bottom of the list as they are recieved.")
-radiofleet_ttp = CreateToolTip(radiofleet,"Enter your three digit Kenwood radio fleet ID number.  This is required for location polling, but is not used for anything else. Pro-tip: this can usually be found as the number directly before the radio number in the raw data recieved.")
-fleet_label_ttp = CreateToolTip(fleet_label,"Enter your three digit Kenwood radio Fleet ID number.  This is required for location polling, but is not used for anything else. Pro-tip: this can usually be found as the number directly before the radio number in the raw data recieved.")
+radiofleet_ttp = CreateToolTip(radiofleet,"Enter your three digit NXDN radio fleet ID number.  This is required for location polling, but is not used for anything else. Pro-tip: this can usually be found as the number directly before the radio number in the raw data recieved.")
+fleet_label_ttp = CreateToolTip(fleet_label,"Enter your three digit NXDN radio Fleet ID number.  This is required for location polling, but is not used for anything else. Pro-tip: this can usually be found as the number directly before the radio number in the raw data recieved.")
 
 sartopo_server_sel.focus()
 
@@ -3358,9 +3360,9 @@ def OnReceiveSerialData(message):
     messagetype = "N" # default is that it's not a valid message, don't print anything in upper textbox
 
     # check for GPS identifiers in the message recieved
-    if "$PKLDS" in message_split: #if we've gotten a gps message from a crsar radio, only need parts 0 (identifier), 2 (active or old gps), 3&5 (lat&long), 13 (radio identifier)
+    if "$PKLDS" in message_split: #if we've gotten a gps message from a SAR radio, only need parts 0 (identifier), 2 (active or old gps), 3&5 (lat&long), 13 (radio identifier)
 
-        data_offset = message_split.index("$PKLDS") # find where in serial string we've recieved gps data (with crsar radios it's always 0, but good to check)
+        data_offset = message_split.index("$PKLDS") # find where in serial string we've recieved gps data (with SAR radios it's always 0, but good to check)
         lat = float(message_split[data_offset+3][:2]) + float(message_split[data_offset+3][2:])/60 # get latitude, format is DDMM.MMMM north
         long = float(message_split[data_offset+5][:3]) + float(message_split[data_offset+5][3:])/60 # get longitude, format is DDDMM.MMMM west
         utmcoord = utm.from_latlon(lat, long*-1) # utm module takes negative longitude for west (could look at offset 4 and 6 for N/S and E/W, but pretty unnecessary at this point)
@@ -3371,7 +3373,7 @@ def OnReceiveSerialData(message):
         radionamer = message_split[data_offset+13]
 
 
-    elif '"$GPRMC' in message_split: #if we've gotten a gps message from a asar radio, only need parts 0 (identifier), 2 (active or old gps), 3&5 (lat&long), -4 (radio identifier).  This is awkward, but radio id is sent in the message immediately proceeding gps message.
+    elif '"$GPRMC' in message_split: #if we've gotten a gps message from a SAR radio, only need parts 0 (identifier), 2 (active or old gps), 3&5 (lat&long), -4 (radio identifier).  This is awkward, but radio id is sent in the message immediately proceeding gps message.
         data_offset = message_split.index('"$GPRMC')
         lat = float(message_split[data_offset+3][:2]) + float(message_split[data_offset+3][2:])/60
         long = float(message_split[data_offset+5][:3]) + float(message_split[data_offset+5][3:])/60
